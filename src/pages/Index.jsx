@@ -1,11 +1,20 @@
 // Complete the Index page component here
 // Use chakra-ui
 import { VStack, HStack, Heading, List, ListItem, Input, Button, Checkbox, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Index = () => {
   const [inputValue, setInputValue] = useState("");
   const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+    setTodos(savedTodos);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const handleToggleTodo = (index) => {
     const newTodos = [...todos];
