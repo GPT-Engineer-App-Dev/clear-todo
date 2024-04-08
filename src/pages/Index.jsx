@@ -1,15 +1,26 @@
 // Complete the Index page component here
 // Use chakra-ui
-import { VStack, HStack, Heading, List, ListItem, Input, Button } from "@chakra-ui/react";
+import { VStack, HStack, Heading, List, ListItem, Input, Button, Checkbox, Text } from "@chakra-ui/react";
 import { useState } from "react";
 
 const Index = () => {
   const [inputValue, setInputValue] = useState("");
   const [todos, setTodos] = useState([]);
 
+  const handleToggleTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
+    setTodos(newTodos);
+  };
+
+  const handleDeleteTodo = (index) => {
+    const newTodos = todos.filter((_, i) => i !== index);
+    setTodos(newTodos);
+  };
+
   const handleAddTodo = () => {
     if (inputValue) {
-      setTodos([...todos, inputValue]);
+      setTodos([...todos, { text: inputValue, completed: false }]);
       setInputValue("");
     }
   };
@@ -31,7 +42,15 @@ const Index = () => {
 
       <List spacing={3}>
         {todos.map((todo, index) => (
-          <ListItem key={index}>{todo}</ListItem>
+          <ListItem key={index}>
+            <HStack>
+              <Checkbox isChecked={todo.completed} onChange={() => handleToggleTodo(index)} />
+              <Text textDecoration={todo.completed ? "line-through" : "none"}>{todo.text}</Text>
+              <Button size="xs" onClick={() => handleDeleteTodo(index)}>
+                X
+              </Button>
+            </HStack>
+          </ListItem>
         ))}
       </List>
     </VStack>
